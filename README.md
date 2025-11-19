@@ -1,2 +1,1 @@
-# VSP_Calibration_Pipeline
-Repository for SMU VSP/ROTSE-I/ROTSE-III Calibration Pipeline
+This directory houses the pipeline for calibration of the VSP/ROTSE-1/ROTSE-III datasets
