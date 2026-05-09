@@ -1,0 +1,149 @@
+# =============================================================================
+# VSP Recalibration Pipeline - main configuration
+# =============================================================================
+# Override any of these in a local file and pass with --config <path>, or by
+# setting the VSP_CONFIG environment variable.
+
+# -----------------------------------------------------------------------------
+# Paths
+# -----------------------------------------------------------------------------
+paths:
+  # Directory holding the ROTSE *_match.fit / *_match.dat files (NOT in this repo).
+  data_dir:        /lustre/work/client/users/cdcook/fits_structs
+  # Per-field PanSTARRS DR2 reference catalogs (one CSV per field).
+  panstarrs_dir:   /lustre/work/client/users/cdcook/VSPData/panFields
+  # Per-night cross-match outputs (one CSV per field+night+exposure).
+  crossmatch_dir:  /lustre/work/client/users/cdcook/VSPData
+  # Per-field+night summary CSVs (one row per exposure, slope/AB/counts/M_lim/JD).
+  summary_dir:     /home/smurotse/CookArea/outputs
+  # Where slopifier / diagnostic plots get written.
+  graphics_dir:    /users/cdcook/VSP/graphics
+  # Final calibrated light curves (lccal output).
+  lightcurves_dir: /users/cdcook/VSP/lightcurves
+
+# -----------------------------------------------------------------------------
+# Survey fields. Each entry defines the RA/Dec grid used by the PanSTARRS
+# catalog fetcher (ps1cone walks a num_ra x num_dec grid of 0.5-deg cones).
+# -----------------------------------------------------------------------------
+fields:
+  sky0002_1a:
+    ra_min: 344.66
+    ra_max: 353.73
+    dec_min: 14.32
+    dec_max: 22.97
+    num_ra: 25
+    num_dec: 15
+  sky0002_1b:
+    ra_min: 336.61
+    ra_max: 345.29
+    dec_min: 6.25
+    dec_max: 14.90
+    num_ra: 25
+    num_dec: 15
+  sky0002_1c:
+    ra_min: 345.13
+    ra_max: 353.81
+    dec_min: 6.35
+    dec_max: 15.00
+    num_ra: 25
+    num_dec: 15
+  sky0001_1a:
+    # Default placeholder; fill in once known.
+    ra_min: 0.0
+    ra_max: 0.0
+    dec_min: 0.0
+    dec_max: 0.0
+    num_ra: 25
+    num_dec: 15
+
+# -----------------------------------------------------------------------------
+# PanSTARRS API
+# -----------------------------------------------------------------------------
+panstarrs:
+  base_url: https://catalogs.mast.stsci.edu/api/v0.1/panstarrs
+  release: dr2
+  table: mean
+  cone_radius_deg: 0.5
+  min_detections: 1
+  columns:
+    - objID
+    - objInfoFlag
+    - qualityFlag
+    - raMean
+    - decMean
+    - gMeanPSFMag
+    - gMeanPSFMagErr
+    - gMeanKronMag
+    - gMeanKronMagErr
+    - gFlags
+    - rMeanPSFMag
+    - rMeanPSFMagErr
+    - rMeanKronMag
+    - rMeanKronMagErr
+    - rFlags
+    - iMeanPSFMag
+    - iMeanPSFMagErr
+    - iMeanKronMag
+    - iMeanKronMagErr
+    - iFlags
+    - zMeanPSFMag
+    - zMeanPSFMagErr
+    - zMeanKronMag
+    - zMeanKronMagErr
+    - zFlags
+    - yMeanPSFMag
+    - yMeanPSFMagErr
+    - yMeanKronMag
+    - yMeanKronMagErr
+    - yFlags
+
+# -----------------------------------------------------------------------------
+# Cross-match settings
+# -----------------------------------------------------------------------------
+crossmatch:
+  match_radius_arcsec: 5.0
+  ra_wrap: true   # Subtract 360 from RA values > 360 (set false if input data already wrapped)
+
+# -----------------------------------------------------------------------------
+# Slopifier (per-exposure pseudo-bolometric calibration fit)
+# -----------------------------------------------------------------------------
+slopifier:
+  mag_min: 5.0
+  mag_max: 25.0
+  apply_kron_cut: true
+  kron_band: g
+  kron_dist: 0.5
+  apply_color_cut: false
+  color_pair_1: gr   # g-r
+  color_pair_2: ri   # r-i
+  drop_panstarrs_sentinels: true   # drop rows where any *MeanPSFMag/*MeanKronMag == -999
+  # Pseudo-bolometric weights, sum/norm scheme: see docs/calibration_math.md
+  bolometric_weights:
+    g: 0.1212
+    r: 0.1463
+    i: 0.1435
+    z: 0.0980
+    y: 0.0393
+  bolometric_norm: 0.5483
+  ab_zeropoint: 48.6   # AB magnitude zero-point used in flux conversion
+  ab_flux_zero_jy: 3631.0e-23   # erg s^-1 cm^-2 Hz^-1 corresponding to AB=0
+
+# -----------------------------------------------------------------------------
+# Light-curve calibration (lccal)
+# -----------------------------------------------------------------------------
+lccal:
+  default_radius_deg: 5.0
+  default_max_mean_error: 0.06
+  default_chisq: 10.0
+  default_decent_epochs: 0.9
+  default_requested_refstars: 5
+  use_avmag: true
+  use_m_lim: true
+  use_teststar: true
+
+# -----------------------------------------------------------------------------
+# Logging
+# -----------------------------------------------------------------------------
+logging:
+  level: INFO   # DEBUG / INFO / WARNING / ERROR
+  format: "%(asctime)s [%(levelname)s] %(name)s: %(message)s"

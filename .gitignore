@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Notebooks
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# Slurm output
+slurm-*.out
+*.err
+
+# Local data + scratch
+*.fit
+*.fits
+*.dat
+*.cobj
+*.csv
+*.png
+*.npy
+data/
+datafiles/
+outputs/
+graphics/
+
+# Environments
+.env
+.venv/
+venv/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+.DS_Store

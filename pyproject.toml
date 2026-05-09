@@ -1,0 +1,133 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vsp-calibration-pipeline"
+version = "2.0.0"
+description = "Photometric recalibration pipeline for VSP / ROTSE-1 / ROTSE-III variable-star surveys."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+authors = [
+    { name = "Chris Cook", email = "christophercook265@gmail.com" },
+]
+keywords = [
+    "astronomy",
+    "photometry",
+    "ROTSE",
+    "PanSTARRS",
+    "variable stars",
+    "light curves",
+    "calibration",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Astronomy",
+]
+dependencies = [
+    "numpy>=1.23",
+    "scipy>=1.10",
+    "pandas>=1.5",
+    "matplotlib>=3.6",
+    "seaborn>=0.12",
+    "astropy>=5.2",
+    "requests>=2.28",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.4",
+    "black>=24.0",
+    "nbstripout>=0.6",
+    "pre-commit>=3.5",
+]
+notebooks = [
+    "jupyter>=1.0",
+    "ipykernel>=6.25",
+]
+
+[project.urls]
+Homepage = "https://github.com/ccook7bit/VSP_Calibration_Pipeline"
+Repository = "https://github.com/ccook7bit/VSP_Calibration_Pipeline"
+Issues = "https://github.com/ccook7bit/VSP_Calibration_Pipeline/issues"
+Documentation = "https://github.com/ccook7bit/VSP_Calibration_Pipeline/tree/main/docs"
+
+[project.scripts]
+vsp-fetch-panstarrs = "vsp.cli:fetch_panstarrs_main"
+vsp-crossmatch      = "vsp.cli:crossmatch_main"
+vsp-slopifier       = "vsp.cli:slopifier_main"
+vsp-lccal           = "vsp.cli:lccal_main"
+vsp-pipeline        = "vsp.cli:pipeline_main"
+vsp-menu            = "vsp.cli:menu_main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["vsp*"]
+
+[tool.setuptools.package-data]
+vsp = ["py.typed"]
+
+# ---------------------------------------------------------------------------
+# Tooling
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+filterwarnings = [
+    # Astropy occasionally emits these from old test fixtures.
+    "ignore::DeprecationWarning:astropy.*",
+]
+
+[tool.coverage.run]
+source = ["vsp"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "W",   # pycodestyle warnings
+    "I",   # isort
+    "B",   # bugbear
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+    "B008",  # function call in argument default
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011"]
+"notebooks/*" = ["E402", "F401", "F811"]

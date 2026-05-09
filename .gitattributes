@@ -1,0 +1,31 @@
+# Auto-detect text files and normalize line endings to LF on commit.
+* text=auto eol=lf
+
+# Force LF for these even on Windows checkouts.
+*.py    text eol=lf
+*.sh    text eol=lf
+*.yaml  text eol=lf
+*.yml   text eol=lf
+*.toml  text eol=lf
+*.md    text eol=lf
+*.cfg   text eol=lf
+*.ini   text eol=lf
+*.txt   text eol=lf
+
+# Shell scripts on the cluster need LF.
+*.sbatch text eol=lf
+
+# Notebooks are JSON; keep them as text but they're generated artifacts.
+*.ipynb text
+
+# Treat binaries as binary so Git doesn't try to diff them.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.pdf   binary
+*.fit   binary
+*.fits  binary
+*.dat   binary
+*.cobj  binary
+*.npy   binary

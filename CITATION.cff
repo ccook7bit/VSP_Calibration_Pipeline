@@ -1,0 +1,32 @@
+# Citation metadata for the VSP Recalibration Pipeline.
+# https://citation-file-format.github.io/
+cff-version: 1.2.0
+title: "VSP Recalibration Pipeline"
+abstract: >-
+  Photometric recalibration pipeline for the VSP / ROTSE-1 / ROTSE-III
+  variable-star surveys. Cross-matches ROTSE detections against the
+  PanSTARRS DR2 reference catalog, fits per-exposure pseudo-bolometric
+  slope and AB-offset corrections, and produces calibrated light curves
+  for individual targets.
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - given-names: Chris
+    family-names: Cook
+    email: christophercook265@gmail.com
+    # Add affiliation / ORCID here when ready, e.g.:
+    # affiliation: "Your Institution"
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+repository-code: "https://github.com/ccook7bit/VSP_Calibration_Pipeline"
+url: "https://github.com/ccook7bit/VSP_Calibration_Pipeline"
+keywords:
+  - astronomy
+  - photometry
+  - ROTSE
+  - PanSTARRS
+  - variable stars
+  - light curves
+  - calibration
+license: MIT
+version: "2.0.0"
+date-released: "2026-05-08"
